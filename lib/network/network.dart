@@ -1,20 +1,9 @@
 import 'package:http/http.dart' as http;
 
-void main() {
-  Network moscow = Network.withoutCountryCode('Moscow');
-  Network london = Network(city: 'London', countryCode: null);
-  Network london1 = Network(city: 'London', countryCode: 'us');
-  Network london2 = Network(city: 'London', countryCode: '  ');
-  print(moscow.url);
-  print(london.url);
-  print(london1.url);
-  print(london2.url);
-}
-
 class Network {
   final String _scheme = 'http';
   final String _host = 'api.openweathermap.org';
-  final String _path = '/data/2.5/weather';
+  final String _path = '/data/2.5/forecast';
   final String city;
   final String? countryCode;
   final Map<String, dynamic> _queryParameters = {
