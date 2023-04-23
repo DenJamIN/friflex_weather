@@ -9,6 +9,7 @@ class Network {
   final Map<String, dynamic> _queryParameters = {
     'q': '',
     'APPID': 'a963eb6466f1df9b98dc313ed262ab91',
+    'units': 'metric',
     'lang': 'ru'
   };
 
