@@ -22,6 +22,7 @@ class ForecastsByCity {
               .where(_isForecastBy3Days)
               .toList());
 
+  //прогноз на 3 дня без учета времени (То есть если 23.04 в 21:00 НЕ будут показаны прогнозы 26.04 до 21:00)
   static bool _isForecastBy3Days(Forecast forecast) {
     final now = DateTime.now();
     final forecastDateTime = DateTime.parse(forecast.dtTxt);
