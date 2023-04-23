@@ -55,18 +55,14 @@ class CitySelectPage extends StatelessWidget {
 
   Widget confirmButton(BuildContext context) {
     const decoration = BoxDecoration(
-        color: Color(0xff47A76A),
-        borderRadius: BorderRadius.all(Radius.circular(40)));
+        color: Color(0xff47A76A), borderRadius: BorderRadius.all(Radius.circular(40)));
     const text = Center(
-        child: Text('Подтвердить',
-            style: TextStyle(color: Colors.white, fontSize: 20)));
+        child: Text('Подтвердить', style: TextStyle(color: Colors.white, fontSize: 20)));
 
     return GestureDetector(
       onTap: () => {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (_) => SingleForecastPage(city: city ?? '')))
+        Navigator.push(context,
+            MaterialPageRoute(builder: (_) => SingleForecastPage(city: formatCity(city))))
       },
       child: Container(
         width: widthDisplay * 0.7,
@@ -75,5 +71,13 @@ class CitySelectPage extends StatelessWidget {
         child: text,
       ),
     );
+  }
+
+  String formatCity(String? city) {
+    city = city ?? '';
+    final cityByDash = city.split('-');
+    return cityByDash
+        .map((e) => e[0].toUpperCase() + e.substring(1, e.length).toLowerCase())
+        .join('-');
   }
 }
