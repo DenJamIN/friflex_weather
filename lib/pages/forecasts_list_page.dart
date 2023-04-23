@@ -1,56 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:friflex/bloc/search_forecast_bloc/search_forecast_bloc.dart';
 import 'package:search_forecast_repository/search_forecast_repository.dart';
 
 class ForecastsListPage extends StatelessWidget {
-  final String city;
+  final ForecastsByCity forecastByCity;
 
-  const ForecastsListPage({super.key, required this.city});
+  const ForecastsListPage({super.key, required this.forecastByCity});
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => SearchForecastRepository(),
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => SearchForecastBloc(
-                searchForecastRepository:
-                    RepositoryProvider.of<SearchForecastRepository>(context)),
-          )
-        ],
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('Прогноз. $city'),
-            actions: [
-              IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.open_in_full_outlined)),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back))
-            ],
-          ),
-          body: _ForecastsListPage(city: city),
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Прогноз. ${forecastByCity.city}'),
       ),
-    );
-  }
-}
-
-class _ForecastsListPage extends StatelessWidget {
-  final String city;
-
-  const _ForecastsListPage({required this.city});
-
-  @override
-  Widget build(BuildContext context) {
-    final forecastByCity =
-    context.select((SearchForecastBloc bloc) => bloc.state.forecastsByCity);
-    context.read<SearchForecastBloc>().add(SearchForecastEvent(city));
-    return Column(
-      children: [
-        //TODO первый элемент с минимальной температурой
-        if (forecastByCity != null)
+      body: Column(
+        children: [
+          getColdestForecast(forecastByCity),
+          const SizedBox(height: 60),
           Expanded(
             child: ListView.builder(
               itemBuilder: (context, index) {
@@ -76,6 +41,44 @@ class _ForecastsListPage extends StatelessWidget {
               itemCount: forecastByCity.forecasts.length,
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget getColdestForecast(ForecastsByCity forecastByCity) {
+    final forecastColdest =
+        forecastByCity.forecasts.reduce((a, b) => a.main.temp < b.main.temp ? a : b);
+
+    return Column(
+      children: [
+        const Text(
+          'Минимальная температура',
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
+        Container(
+          decoration: const BoxDecoration(
+              color: Color(0xff5adcd9),
+              borderRadius: BorderRadius.all(Radius.circular(40))),
+          child: ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(forecastColdest.dtTxt),
+                Text('Темп: ${forecastColdest.main.temp}'),
+                Text('Ощущ: ${forecastColdest.main.feelsLike}'),
+                Text('Дв: ${forecastColdest.main.pressure}')
+              ],
+            ),
+            leading: Hero(
+              tag: 'coldestTemp',
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(forecastColdest.weather.icon),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
