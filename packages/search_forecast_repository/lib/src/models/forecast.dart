@@ -1,17 +1,4 @@
-import 'dart:convert';
-
-import 'package:friflex/models/rain.dart';
-import 'package:friflex/models/snow.dart';
-import 'package:friflex/models/system_informations.dart';
-import 'package:friflex/models/temperature.dart';
-import 'package:friflex/models/weather.dart';
-import 'package:friflex/models/wind.dart';
-
-import 'clouds.dart';
-
-Forecast forecastModelJson(String str) => Forecast.fromJson(jsonDecode(str));
-
-String forecastModelToJson(Forecast data) => jsonEncode(data.toJson());
+import 'models.dart';
 
 class Forecast {
   int visibility;

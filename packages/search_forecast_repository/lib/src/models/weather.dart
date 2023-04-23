@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Weather weatherModelJson(String str) => Weather.fromJson(jsonDecode(str));
-
-String weatherModelToJson(Weather data) => jsonEncode(data.toJson());
-
 class Weather {
   int id;
   String main;

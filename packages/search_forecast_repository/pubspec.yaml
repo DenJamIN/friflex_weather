@@ -1,6 +1,5 @@
-name: friflex
-description: Weather
-
+name: search_forecast_repository
+description: search_forecast_repository
 
 publish_to: 'none'
 version: 1.0.0+1
@@ -11,12 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
   http: ^0.13.5
-  test: ^1.21.4
-  flutter_bloc: ^8.1.2
-  search_forecast_repository:
-    path: packages/search_forecast_repository
 
 dev_dependencies:
   flutter_test:

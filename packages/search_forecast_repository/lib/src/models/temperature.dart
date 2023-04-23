@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-Temperature temperatureModelJson(String str) =>
-    Temperature.fromJson(jsonDecode(str));
-
-String temperatureModelToJson(Temperature data) => jsonEncode(data.toJson());
-
 class Temperature {
   num temp;
   num feelsLike;

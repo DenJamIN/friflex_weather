@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-Coordinate coordinateModelJson(String str) =>
-    Coordinate.fromJson(jsonDecode(str));
-
-String coordinateModelToJson(Coordinate data) => jsonEncode(data.toJson());
-
 class Coordinate {
   num lon;
   num lat;

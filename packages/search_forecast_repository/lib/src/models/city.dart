@@ -1,10 +1,4 @@
-import 'dart:convert';
-
 import 'coordinate.dart';
-
-City cityModelJson(String str) => City.fromJson(jsonDecode(str));
-
-String cityModelToJson(City data) => jsonEncode(data.toJson());
 
 class City {
   int id;

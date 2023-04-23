@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Snow snowModelJson(String str) => Snow.fromJson(jsonDecode(str));
-
-String snowModelToJson(Snow data) => jsonEncode(data.toJson());
-
 class Snow {
   num periodH;
 

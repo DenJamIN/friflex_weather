@@ -1,13 +1,4 @@
-import 'dart:convert';
-
-import 'city.dart';
-import 'forecast.dart';
-
-ForecastsByCity forecastsByCityModelJson(String str) =>
-    ForecastsByCity.fromJson(jsonDecode(str));
-
-String forecastsByCityModelToJson(ForecastsByCity data) =>
-    jsonEncode(data.toJson());
+import 'models.dart';
 
 class ForecastsByCity {
   String code;

@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Rain windModelJson(String str) => Rain.fromJson(jsonDecode(str));
-
-String windModelToJson(Rain data) => jsonEncode(data.toJson());
-
 class Rain {
   num periodH;
 

@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Wind windModelJson(String str) => Wind.fromJson(jsonDecode(str));
-
-String windModelToJson(Wind data) => jsonEncode(data.toJson());
-
 class Wind {
   num speed;
   int deg;

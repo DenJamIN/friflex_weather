@@ -1,9 +1,3 @@
-import 'dart:convert';
-
-Clouds cloudsModelJson(String str) => Clouds.fromJson(jsonDecode(str));
-
-String cloudsModelToJson(Clouds data) => jsonEncode(data.toJson());
-
 class Clouds {
   num all;
 

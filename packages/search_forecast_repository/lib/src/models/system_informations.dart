@@ -1,10 +1,3 @@
-import 'dart:convert';
-
-SystemInfo systemInfoModelJson(String str) =>
-    SystemInfo.fromJson(jsonDecode(str));
-
-String systemInfoModelToJson(SystemInfo data) => jsonEncode(data.toJson());
-
 class SystemInfo {
   bool day;
 
