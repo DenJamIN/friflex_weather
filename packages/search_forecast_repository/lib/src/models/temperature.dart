@@ -1,6 +1,4 @@
 class Temperature {
-  static const kelvinT = 273.15;
-
   num temp;
   num feelsLike;
   num tempMin;
@@ -23,19 +21,15 @@ class Temperature {
       required this.humidity});
 
   factory Temperature.fromJson(Map<String, dynamic> json) => Temperature(
-      temp: convertToCAndRound(json['temp']),
-      feelsLike: convertToCAndRound(json['feels_like']),
-      tempMin: convertToCAndRound(json['temp_min']),
-      tempMax: convertToCAndRound(json['temp_max']),
+      temp: json['temp'],
+      feelsLike: json['feels_like'],
+      tempMin: json['temp_min'],
+      tempMax: json['temp_max'],
       pressure: json['pressure'],
       grndLevel: json['grnd_level'],
       seaLevel: json['sea_level'],
       tempKf: json['temp_kf'],
       humidity: json['humidity']);
-
-  static num convertToCAndRound(dynamic value){
-    return num.parse((value - kelvinT).toStringAsFixed(1));
-  }
 
   Map<String, dynamic> toJson() => {
         'temp': temp,
