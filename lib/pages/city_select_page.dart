@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:friflex/pages/single_forecast_page.dart';
 
 class CitySelectPage extends StatelessWidget {
   CitySelectPage({super.key});
@@ -16,11 +17,11 @@ class CitySelectPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Center(child: Text('Прогноз погоды'))),
-      body: getBody(),
+      body: getBody(context),
     );
   }
 
-  Widget getBody() {
+  Widget getBody(BuildContext context) {
     const greetingsLabel = Text(
       'Ваше посещение мы тоже спрогнозировали!',
       textAlign: TextAlign.center,
@@ -29,7 +30,7 @@ class CitySelectPage extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [greetingsLabel, selectCityField(), confirmButton()],
+        children: [greetingsLabel, selectCityField(), confirmButton(context)],
       ),
     );
   }
@@ -52,7 +53,7 @@ class CitySelectPage extends StatelessWidget {
     );
   }
 
-  Widget confirmButton() {
+  Widget confirmButton(BuildContext context) {
     const decoration = BoxDecoration(
         color: Color(0xff47A76A),
         borderRadius: BorderRadius.all(Radius.circular(40)));
@@ -65,8 +66,12 @@ class CitySelectPage extends StatelessWidget {
       height: heightDisplay * 0.1,
       decoration: decoration,
       child: GestureDetector(
-        //TODO навигатор на вторую страницу, с передачей города
-        onTap: () => {},
+        onTap: () => {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => SingleForecastPage(city: city ?? '')))
+        },
         child: text,
       ),
     );
