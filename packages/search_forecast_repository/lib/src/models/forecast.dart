@@ -36,18 +36,6 @@ class Forecast {
       snow: json.containsKey('snow') ? Snow.fromJson(json['snow']) : null,
       dtTxt: json['dt_txt']);
 
-  factory Forecast.fromMap(Map<dynamic, dynamic> map) => Forecast(
-      visibility: map['visibility'],
-      pop: map['pop'],
-      weather: Weather.fromJson(map['weather'].first),
-      main: Temperature.fromJson(map['main']),
-      wind: Wind.fromJson(map['wind']),
-      clouds: Clouds.fromJson(map['clouds']),
-      sys: SystemInfo.fromJson(map['sys']),
-      rain: map.containsKey('rain') ? Rain.fromJson(map['rain']) : null,
-      snow: map.containsKey('snow') ? Snow.fromJson(map['snow']) : null,
-      dtTxt: map['dt_txt']);
-
   Map<String, dynamic> toJson() => {
         'visibility': visibility,
         'pop': pop,
