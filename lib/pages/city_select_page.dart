@@ -61,17 +61,17 @@ class CitySelectPage extends StatelessWidget {
         child: Text('Подтвердить',
             style: TextStyle(color: Colors.white, fontSize: 20)));
 
-    return Container(
-      width: widthDisplay * 0.7,
-      height: heightDisplay * 0.1,
-      decoration: decoration,
-      child: GestureDetector(
-        onTap: () => {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (_) => SingleForecastPage(city: city ?? '')))
-        },
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => SingleForecastPage(city: city ?? '')))
+      },
+      child: Container(
+        width: widthDisplay * 0.7,
+        height: heightDisplay * 0.1,
+        decoration: decoration,
         child: text,
       ),
     );
