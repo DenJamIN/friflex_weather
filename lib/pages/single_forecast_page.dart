@@ -1,13 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:friflex/bloc/search_forecast_bloc/search_forecast_bloc.dart';
 import 'package:search_forecast_repository/search_forecast_repository.dart';
 
 class SingleForecastPage extends StatelessWidget {
-  String city;
+  final String city;
 
-  SingleForecastPage({required this.city});
+  const SingleForecastPage({super.key, required this.city});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +15,8 @@ class SingleForecastPage extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                SearchForecastBloc(
-                    searchForecastRepository:
+            create: (context) => SearchForecastBloc(
+                searchForecastRepository:
                     RepositoryProvider.of<SearchForecastRepository>(context)),
           )
         ],
@@ -27,11 +25,12 @@ class SingleForecastPage extends StatelessWidget {
             title: Text('Прогноз. $city'),
             actions: [
               IconButton(
-                  onPressed: () {}, icon: Icon(Icons.open_in_full_outlined)),
-              IconButton(onPressed: () {}, icon: Icon(Icons.arrow_back))
+                  onPressed: () {},
+                  icon: const Icon(Icons.open_in_full_outlined)),
+              IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back))
             ],
           ),
-          body: _SingleForecastPage(),
+          body: _SingleForecastPage(city: city),
         ),
       ),
     );
@@ -39,11 +38,36 @@ class SingleForecastPage extends StatelessWidget {
 }
 
 class _SingleForecastPage extends StatelessWidget {
+  final String city;
+
+  const _SingleForecastPage({required this.city});
+
   @override
   Widget build(BuildContext context) {
-    final forecastByCity = context.select((SearchForecastBloc bloc) =>
-    bloc.state.forecastsByCity);
-    return Column(children: [],);
+    final forecastByCity =
+        context.select((SearchForecastBloc bloc) => bloc.state.forecastsByCity);
+    context.read<SearchForecastBloc>().add(SearchForecastEvent(city));
+    return Column(
+      children: [
+        if (forecastByCity != null)
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                final day = forecastByCity.forecasts[index];
+                return ListTile(
+                  title: Text(day.dtTxt),
+                  leading: Hero(
+                    tag: day.dtTxt,
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(day.weather.icon),
+                    ),
+                  ),
+                );
+              },
+              itemCount: forecastByCity.forecasts.length,
+            ),
+          ),
+      ],
+    );
   }
-
 }
