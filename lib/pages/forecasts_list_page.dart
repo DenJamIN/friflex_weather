@@ -3,14 +3,19 @@ import 'package:search_forecast_repository/search_forecast_repository.dart';
 
 class ForecastsListPage extends StatelessWidget {
   final ForecastsByCity forecastByCity;
+  late double width;
+  late double height;
 
-  const ForecastsListPage({super.key, required this.forecastByCity});
+  ForecastsListPage({super.key, required this.forecastByCity});
 
   @override
   Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width;
+    height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Прогноз. ${forecastByCity.city}'),
+        title: Text('Прогноз. ${forecastByCity.city.name}'),
       ),
       body: Column(
         children: [
@@ -21,14 +26,18 @@ class ForecastsListPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final day = forecastByCity.forecasts[index];
                 return ListTile(
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(day.dtTxt),
-                      Text('Темп: ${day.main.temp}'),
-                      Text('Ощущ: ${day.main.feelsLike}'),
-                      Text('Дв: ${day.main.pressure}')
-                    ],
+                  title: SizedBox(
+                    width: width * 0.9,
+                    height: height * 0.1,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        paddingText(day.dtTxt),
+                        paddingText('Температура: ${day.main.temp}'),
+                        paddingText('Ощущается: ${day.main.feelsLike}'),
+                        paddingText('Давление: ${day.main.pressure}'),
+                      ],
+                    ),
                   ),
                   leading: Hero(
                     tag: day.dtTxt,
@@ -62,14 +71,18 @@ class ForecastsListPage extends StatelessWidget {
               color: Color(0xff5adcd9),
               borderRadius: BorderRadius.all(Radius.circular(40))),
           child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(forecastColdest.dtTxt),
-                Text('Темп: ${forecastColdest.main.temp}'),
-                Text('Ощущ: ${forecastColdest.main.feelsLike}'),
-                Text('Дв: ${forecastColdest.main.pressure}')
-              ],
+            title: SizedBox(
+              width: width * 0.9,
+              height: height * 0.1,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  paddingText(forecastColdest.dtTxt),
+                  paddingText('Темп: ${forecastColdest.main.temp}'),
+                  paddingText('Ощущ: ${forecastColdest.main.feelsLike}'),
+                  paddingText('Дв: ${forecastColdest.main.pressure}'),
+                ],
+              ),
             ),
             leading: Hero(
               tag: 'coldestTemp',
@@ -80,6 +93,13 @@ class ForecastsListPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget paddingText(String text) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(text),
     );
   }
 }
