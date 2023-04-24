@@ -16,9 +16,8 @@ class SingleForecastPage extends StatelessWidget {
       child: MultiBlocProvider(
         providers: [
           BlocProvider(
-            create: (context) =>
-                SearchForecastBloc(
-                    searchForecastRepository:
+            create: (context) => SearchForecastBloc(
+                searchForecastRepository:
                     RepositoryProvider.of<SearchForecastRepository>(context)),
           )
         ],
@@ -36,7 +35,7 @@ class _SingleForecastPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final forecastByCity =
-    context.select((SearchForecastBloc bloc) => bloc.state.forecastsByCity);
+        context.select((SearchForecastBloc bloc) => bloc.state.forecastsByCity);
     context.read<SearchForecastBloc>().add(SearchForecastEvent(city));
 
     return Scaffold(
@@ -45,12 +44,11 @@ class _SingleForecastPage extends StatelessWidget {
         actions: [
           if (forecastByCity != null)
             IconButton(
-                onPressed: () =>
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) =>
-                                ForecastsListPage(forecastByCity: forecastByCity))),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            ForecastsListPage(forecastByCity: forecastByCity))),
                 icon: const Icon(Icons.open_in_full_outlined))
         ],
       ),
@@ -62,9 +60,8 @@ class _SingleForecastPage extends StatelessWidget {
     return BlocListener<SearchForecastBloc, SearchForecastState>(
       listener: (context, state) async {
         if (state.forecastsByCity == null) {
-          ScaffoldMessengerAlerts.showErrorMessage(
-              context: context, text: 'Ошибка получения данных');
-          await ErrorDialogAlert.showDialogAlert(context: context, body: 'Ошибка получения данных');
+          ErrorAlert.showErrorMessage(context: context);
+          await ErrorAlert.showDialogAlert(context: context);
         }
       },
       child: Container(),
@@ -72,33 +69,16 @@ class _SingleForecastPage extends StatelessWidget {
   }
 }
 
-class ScaffoldMessengerAlerts {
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorMessage(
-      {required BuildContext context, required String text}) {
-    return ScaffoldMessenger.of(context).showSnackBar(getErrorSnackBar(text));
-  }
-
-  static SnackBar getErrorSnackBar(String text) {
-    return SnackBar(
-      content: Text(text),
-      backgroundColor: Colors.redAccent,
-      dismissDirection: DismissDirection.vertical,
-    );
-  }
-}
-
 enum DialogActions { cancel }
 
-class ErrorDialogAlert {
-  static Future<DialogActions> showDialogAlert({required BuildContext context,
-    String title = 'Ошибка',
-    required String body}) async {
+class ErrorAlert {
+  static Future<DialogActions> showDialogAlert({required BuildContext context}) async {
     final action = await showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text(title),
-            content: Text(body),
+            title: const Text('ОШИБКА'),
+            content: const Text('Ошибка получения данных'),
             actions: [
               ElevatedButton(
                 onPressed: () {
@@ -112,5 +92,16 @@ class ErrorDialogAlert {
           );
         });
     return (action != null) ? action : DialogActions.cancel;
+  }
+
+  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorMessage(
+      {required BuildContext context}) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Ошибка получения данных'),
+        backgroundColor: Colors.redAccent,
+        showCloseIcon: true,
+      ),
+    );
   }
 }
