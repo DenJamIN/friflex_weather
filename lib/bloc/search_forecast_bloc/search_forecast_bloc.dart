@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:search_forecast_repository/search_forecast_repository.dart';
 
 part 'search_forecast_event.dart';
-
 part 'search_forecast_state.dart';
 
 class SearchForecastBloc
