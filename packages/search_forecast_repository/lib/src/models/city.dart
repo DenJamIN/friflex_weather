@@ -1,5 +1,6 @@
 import 'coordinate.dart';
 
+//Модель
 class City {
   int id;
   String name;
@@ -20,6 +21,8 @@ class City {
       required this.sunrise,
       required this.sunset});
 
+  //Достаём значения из джейсонки
+  //Делаем фабричный констурктор, для того чтобы создать только один экземпляр
   factory City.fromJson(Map<String, dynamic> json) => City(
       id: json['id'],
       name: json['name'],

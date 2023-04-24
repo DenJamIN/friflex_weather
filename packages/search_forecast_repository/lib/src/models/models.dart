@@ -1,3 +1,4 @@
+//Точка доступа ко всем моделем, для поддержки принципа инверсии зависимости
 export 'city.dart';
 export 'clouds.dart';
 export 'coordinate.dart';

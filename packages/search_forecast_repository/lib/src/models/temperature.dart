@@ -20,6 +20,8 @@ class Temperature {
       required this.tempKf,
       required this.humidity});
 
+  //Достаём значения из джейсонки
+  //Делаем фабричный констурктор, для того чтобы создать только один экземпляр
   factory Temperature.fromJson(Map<String, dynamic> json) => Temperature(
       temp: json['temp'],
       feelsLike: json['feels_like'],

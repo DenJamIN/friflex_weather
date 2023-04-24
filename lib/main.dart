@@ -5,6 +5,7 @@ void main() {
   runApp(const MyApp());
 }
 
+//Программа, которая даст мне шанс научиться и стать хорошим разрабом!
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override

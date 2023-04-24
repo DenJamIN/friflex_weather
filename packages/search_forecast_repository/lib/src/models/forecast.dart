@@ -24,6 +24,8 @@ class Forecast {
       required this.sys,
       required this.dtTxt});
 
+  //Достаём значения из джейсонки
+  //Делаем фабричный констурктор, для того чтобы создать только один экземпляр
   factory Forecast.fromJson(Map<String, dynamic> json) => Forecast(
       visibility: json['visibility'],
       pop: json['pop'],
