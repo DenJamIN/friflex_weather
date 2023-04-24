@@ -4,6 +4,8 @@ import 'package:friflex/bloc/search_forecast_bloc/search_forecast_bloc.dart';
 import 'package:friflex/pages/forecasts_list_page.dart';
 import 'package:search_forecast_repository/search_forecast_repository.dart';
 
+import '../alerts/error_alert.dart';
+
 class SingleForecastPage extends StatelessWidget {
   final String city;
 
@@ -57,51 +59,130 @@ class _SingleForecastPage extends StatelessWidget {
   }
 
   Widget forecastInfo() {
-    return BlocListener<SearchForecastBloc, SearchForecastState>(
-      listener: (context, state) async {
-        if (state.forecastsByCity == null) {
-          ErrorAlert.showErrorMessage(context: context);
-          await ErrorAlert.showDialogAlert(context: context);
-        }
-      },
-      child: Container(),
+    return BlocConsumer<SearchForecastBloc, SearchForecastState>(
+        listener: (context, state) async {
+          if (state.forecastsByCity == null) {
+            ErrorAlert.showErrorMessage(context: context);
+            await ErrorAlert.showDialogAlert(context: context);
+          }
+        },
+        builder: (context, state) => Center(child: getContent(state.forecastsByCity)));
+  }
+
+  Widget getContent(ForecastsByCity? forecastsByCity) {
+    if (forecastsByCity != null) {
+      final forecast = forecastsByCity.forecasts.first;
+      return Column(
+        children: [
+          Text(
+            'Погода в городе ${forecastsByCity.city.name} сейчас (${forecast.dtTxt})',
+            style: const TextStyle(fontSize: 24),
+            textAlign: TextAlign.center,
+          ),
+          weatherStatus(forecast),
+          TabView(
+            tabColor: const Color(0xffffca8e),
+            tabName: 'Температура',
+            tabValues: [
+              'Температура: ${forecast.main.temp.toString()}',
+              'Ощущается: ${forecast.main.feelsLike.toString()}',
+              'Давление: ${forecast.main.pressure.toString()}',
+              'Влажность: ${forecast.main.humidity.toString()}',
+            ],
+          ),
+          TabView(
+            tabColor: const Color(0xff87CEFA),
+            tabName: 'Облачность',
+            tabValues: [
+              'Процентная облачность: ${forecast.clouds.all.toString()}%',
+              if (forecast.rain != null)
+                'Объём осадков дождя: ${forecast.rain.toString()}',
+              if (forecast.snow != null)
+                'Объём осадков снега: ${forecast.rain.toString()}',
+            ],
+          ),
+          TabView(
+            tabColor: const Color(0xff00BFFF),
+            tabName: 'Ветер',
+            tabValues: [
+              'Скорость ветра: ${forecast.wind.speed.toString()}м/с',
+              'Направление ветра в градусах: ${forecast.wind.deg.toString()}',
+              if (forecast.wind.gust != null)
+                'Порыв ветра: ${forecast.wind.gust.toString()}м/с',
+            ],
+          ),
+        ],
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  Widget weatherStatus(Forecast forecast) {
+    return SizedBox(
+      height: 100,
+      width: 600,
+      child: Row(
+        children: [
+          const Text(
+            'Статус погоды: ',
+            style: TextStyle(fontSize: 18),
+          ),
+          Image.network(
+            forecast.weather.icon,
+            scale: 0.6,
+          ),
+          Text(
+            forecast.weather.description.toUpperCase(),
+            style: const TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
     );
   }
 }
 
-enum DialogActions { cancel }
+class TabView extends StatelessWidget {
+  final String tabName;
+  final Color tabColor;
+  final List<String> tabValues;
 
-class ErrorAlert {
-  static Future<DialogActions> showDialogAlert({required BuildContext context}) async {
-    final action = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('ОШИБКА'),
-            content: const Text('Ошибка получения данных'),
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pop(DialogActions.cancel);
-                  Navigator.of(context).pop();
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.cyan),
-                child: const Text('Отмена'),
-              )
-            ],
-          );
-        });
-    return (action != null) ? action : DialogActions.cancel;
-  }
+  const TabView(
+      {super.key,
+      required this.tabName,
+      required this.tabValues,
+      required this.tabColor});
 
-  static ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showErrorMessage(
-      {required BuildContext context}) {
-    return ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Ошибка получения данных'),
-        backgroundColor: Colors.redAccent,
-        showCloseIcon: true,
-      ),
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery.of(context).size.height;
+
+    return Column(
+      children: [
+        Text(
+          tabName,
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        Container(
+          height: height * 0.2,
+          width: width * 0.8,
+          decoration: const BoxDecoration(
+              color: Color(0xffffca8e),
+              borderRadius: BorderRadius.all(Radius.circular(15))),
+          child: ListView.builder(
+            itemBuilder: (context, index) {
+              final value = tabValues[index];
+              return ListTile(
+                title: Text(value),
+              );
+            },
+            itemCount: tabValues.length,
+          ),
+        )
+      ],
     );
   }
 }
